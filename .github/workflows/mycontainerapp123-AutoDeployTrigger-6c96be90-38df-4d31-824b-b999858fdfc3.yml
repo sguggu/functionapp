@@ -9,11 +9,25 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Login to Azure Container Registry
-    - uses: azure/docker-login@v2
+ 
+          
+    - name: Azure Container Registry Login
+      uses: azure/container-registry-login@v1
       with:
-          username: "sguggu"
-          password: “$env:DOCKER_PASSWORD”
-
-   
+        login-server: mycontainerregistry197.azurecr.io
+        username: “$env:ACR_USERNAME"
+        password: “$env:ACR_PASSWORD"
+        
+    - name: Build and push Docker image to ACR
+      run: |
+        docker build . -t mycontainerregistry197.azurecr.io/django-app:latest
+        docker push mycontainerregistry197.azurecr.io/django-app:latest
+  
+    - name: Deploy to ACA
+      run: |
+          az container create --resource-group Ymyrg \
+                                --name containerApp555 \
+                                --image mycontainerregistry197.azurecr.io/django-app:latest \
+                                --cpu 1 \
+                                --memory 1 \
+                                --ports 80 \
