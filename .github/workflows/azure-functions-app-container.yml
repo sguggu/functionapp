@@ -16,3 +16,24 @@ jobs:
       with:
           username: "sguggu"
           password: “$env:DOCKER_PASSWORD”
+
+
+    - name: Pullinng docker image
+      run: |
+        docker pull contoso.azurecr.io/private/image:latest
+        docker pull private/image:latest
+
+    - name: Build and push Docker image to ACR
+      run: |
+        docker build . -t mycontainerregistry197.azurecr.io/django-app:latest
+        docker push mycontainerregistry197.azurecr.io/django-app:latest
+  
+    - name: Deploy to ACA
+      run: |
+          az container create --resource-group Ymyrg \
+                                --name containerApp555 \
+                                --image mycontainerregistry197.azurecr.io/django-app:latest \
+                                --cpu 1 \
+                                --memory 1 \
+                                --ports 80 \
+
