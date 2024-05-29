@@ -1,47 +1,41 @@
-name: Trigger auto deployment for mycontainerapp123
-
-# When this action will be executed
+name: Build and Deploy to ACA
 on:
-  # Automatically trigger it when detected changes in repo
   push:
-    branches: 
-      [ main ]
-    paths:
-    - '**'
-    - '.github/workflows/mycontainerapp123-AutoDeployTrigger-6c96be90-38df-4d31-824b-b999858fdfc3.yml'
-
-  # Allow manual trigger 
-  workflow_dispatch:      
-
+    branches:
+      - main
 jobs:
-  build-and-deploy:
+  build_and_push:
     runs-on: ubuntu-latest
-    permissions: 
-      id-token: write #This is required for requesting the OIDC JWT Token
-      contents: read #Required when GH token is used to authenticate with private repo
-
     steps:
-      - name: Checkout to the branch
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.MYCONTAINERAPP123_AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.MYCONTAINERAPP123_AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.MYCONTAINERAPP123_AZURE_SUBSCRIPTION_ID }}
+    - name: Login to Azure Container Registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: youracr.azurecr.io
+        username: "sguggu"
+        password: “$env:DOCKER_PASSWORD”
 
-      - name: Build and push container image to registry
-        uses: azure/container-apps-deploy-action@v2
-        with:
-          appSourcePath: ${{ github.workspace }} 
-          registryUrl: mycontainerregistry197.azurecr.io
-          registryUsername: ${{ secrets.MYCONTAINERAPP123_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.MYCONTAINERAPP123_REGISTRY_PASSWORD }}
-          containerAppName: mycontainerapp123
-          resourceGroup: myrg
-          imageToBuild: mycontainerregistry197.azurecr.io/mycontainerapp123:${{ github.sha }}
-          _buildArgumentsKey_: |
-            _buildArgumentsValues_
+    - name: Build and push Docker image to ACR
+      run: |
+        docker build . -t mycontainerregistry197.azurecr.io/django-app:latest
+        docker push mycontainerregistry197.azurecr.io/django-app:latest
 
+  deploy_to_aca:
+    needs: build_and_push
+    runs-on: ubuntu-latest
+    steps:
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: “$env:AZURE_CREDENTIALS"
 
+    - name: Deploy to ACA
+      run: |
+        az container create --resource-group Ymyrg \
+                            --name containerApp555 \
+                            --image mycontainerregistry197.azurecr.io/django-app:latest \
+                            --cpu 1 \
+                            --memory 1 \
+                            --ports 80
