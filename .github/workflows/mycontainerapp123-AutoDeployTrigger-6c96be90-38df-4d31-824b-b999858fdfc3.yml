@@ -21,9 +21,7 @@ jobs:
         login-server: index.docker.io
         username: "sguggu"
         password: “$env:DOCKER_PASSWORD”
-    - run: |
-        docker pull mycontainerregistry197.azurecr.io/django-app:latest
-        docker pull django-app:latest 
+
         
     - name: Build and push Docker image to ACR
       run: |
