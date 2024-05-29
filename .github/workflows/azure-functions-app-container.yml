@@ -18,7 +18,7 @@ jobs:
           password: “$env:DOCKER_PASSWORD”
           
     - name: Login to Azure Container Registry
-    - uses: azure/docker-login@v2
+    - uses: azure/docker-login@v1
       with:
           login-server: index.docker.io
           username: "sguggu"
