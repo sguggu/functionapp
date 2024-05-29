@@ -12,11 +12,18 @@ jobs:
 
 
     - name: Azure Docker Login
-      uses: azure/docker-login@v2
+      uses: azure/docker-login@v1
       with:
           username: "sguggu"
           password: “$env:DOCKER_PASSWORD”   
           
+    - name: Login to ACR
+    - uses: azure/docker-login@v2
+      with:
+        login-server: mycontainerregistry197.azurecr.io
+        username: “$env:ACR_USERNAME"
+        password: “$env:ACR_PASSWORD"
+        
     - name: Build and push Docker image to ACR
       run: |
         docker build . -t mycontainerregistry197.azurecr.io/django-app:latest
