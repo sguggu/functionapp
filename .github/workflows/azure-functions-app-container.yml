@@ -1,0 +1,32 @@
+name: Azure Container App Deployment
+
+on:
+  push:
+    branches:
+      - main  # Change this to your main branch name
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Login to Azure Container Registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: mycontainerregistry197.azurecr.io
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD}}
+
+    - name: Build and push Docker image
+      run: |
+        docker build . -t { secrets.ACR_PASSWORD}.azurecr.io/django-app:latest
+        docker push { secrets.ACR_PASSWORD}.azurecr.io/django-app:latest
+
+    - name: Deploy to Azure Container App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name:  ${{ secrets.ACR_ACA_NAME }}
+        images: 'mycontainerregistry197.azurecr.io/django-app:latest'
