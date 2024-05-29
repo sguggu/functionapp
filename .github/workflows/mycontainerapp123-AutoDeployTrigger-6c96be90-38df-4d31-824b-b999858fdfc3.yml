@@ -13,32 +13,26 @@ jobs:
     - name: Login to Azure Container Registry
     - uses: azure/docker-login@v2
       with:
-        login-server: contoso.azurecr.io
+        login-server: mycontainerregistry197.azurecr.io
         username: “$env:ACR_USERNAME"
         password: “$env:ACR_PASSWORD"
+
+    - name: Login to Azure Container Registry
     - uses: azure/docker-login@v2
       with:
           login-server: index.docker.io
           username: "sguggu"
           password: “$env:DOCKER_PASSWORD”
 
+    - name: Pulling image
       run: |
-        docker pull contoso.azurecr.io/private/image:latest
-        docker pull private/image:latest
+        docker pull mycontainerregistry197.azurecr.io/django-app:latest
+        docker pull django-app:latest
 
     - name: Build and push Docker image to ACR
       run: |
         docker build . -t mycontainerregistry197.azurecr.io/django-app:latest
         docker push mycontainerregistry197.azurecr.io/django-app:latest
-
-
-    - name: deploy to acr
-      runs-on: ubuntu-latest
-      steps:
-          - name: Login to Azure
-            uses: azure/login@v1
-            with:
-              creds: “$env:AZURE_CREDENTIALS"
 
     - name: Deploy to ACA
       run: |
