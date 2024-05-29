@@ -14,7 +14,6 @@ jobs:
     - name: Azure Docker Login
     - uses: azure/docker-login@v2
       with:
-        login-server: index.docker.io
         username: "sguggu"
         password: “$env:DOCKER_PASSWORD”
         
