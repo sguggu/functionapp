@@ -20,8 +20,8 @@ jobs:
 
     - name: Pullinng docker image
       run: |
-        docker pull contoso.azurecr.io/private/image:latest
-        docker pull private/image:latest
+        docker pull mycontainerregistry197.azurecr.io/django-app:latest
+        docker pull django-app:latest
 
     - name: Build and push Docker image to ACR
       run: |
