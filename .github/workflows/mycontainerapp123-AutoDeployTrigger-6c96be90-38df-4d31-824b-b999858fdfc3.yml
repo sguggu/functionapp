@@ -11,12 +11,16 @@ jobs:
       uses: actions/checkout@v2
  
           
-    - name: Azure Container Registry Login
-      uses: azure/container-registry-login@v1
+    - name: Azure Login
+      uses: azure/login@v1
       with:
-        login-server: mycontainerregistry197.azurecr.io
-        username: “$env:ACR_USERNAME"
-        password: “$env:ACR_PASSWORD"
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+    - name: Azure Docker Login
+      uses: azure/docker-login@v2
+      with:
+          username: "sguggu"
+          password: “$env:DOCKER_PASSWORD”       
         
     - name: Build and push Docker image to ACR
       run: |
