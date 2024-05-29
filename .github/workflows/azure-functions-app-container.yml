@@ -22,11 +22,11 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build . -t ${{ secrets.ACR_USERNAME}}.azurecr.io/django-app:latest
-        docker push ${{ secrets.ACR_USERNAME}}.azurecr.io/django-app:latest
+        docker build . -t mycontainerregistry197.azurecr.io/django-app:latest
+        docker push mycontainerregistry197.azurecr.io/django-app:latest
 
     - name: Deploy to Azure Container App
       uses: azure/webapps-deploy@v2
       with:
-        app-name:  ${{ secrets.ACR_ACA_NAME }}
+        app-name: "mycontainerapp123"
         images: 'mycontainerregistry197.azurecr.io/django-app:latest'
