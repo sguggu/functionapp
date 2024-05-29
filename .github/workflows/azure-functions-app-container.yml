@@ -30,3 +30,12 @@ jobs:
       with:
         app-name: "mycontainerapp123"
         images: 'mycontainerregistry197.azurecr.io/django-app:latest'
+
+     - name: Deploy to Azure Container Instance
+      uses: azure/aci-deploy@v1
+      with:
+        resource-group: "myrg"
+        image-name: mycontainerregistry197.azurecr.io/django-app:latest
+        registry-login-server: mycontainerregistry197.azurecr.io
+        registry-username: “$env:ACR_USERNAME” 
+        registry-password: “$env:ACR_PASSWORD”
