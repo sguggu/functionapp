@@ -20,12 +20,7 @@ jobs:
           username: "sguggu"
           password: “$env:DOCKER_PASSWORD”
           
-    - name: Azure Container Registry Login
-      uses: azure/container-registry-login@v1
-      with:
-        login-server: mycontainerregistry197.azurecr.io
-        username: “$env:ACR_USERNAME"
-        password: “$env:ACR_PASSWORD"
+ 
         
     - name: Build and push Docker image to ACR
       run: |
