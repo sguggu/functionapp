@@ -17,7 +17,10 @@ jobs:
           username: "sguggu"
           password: “$env:DOCKER_PASSWORD”
           
- 
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: “$env:AZURE_CREDENTIALS"
         
     - name: Build and push Docker image to ACR
       run: |
