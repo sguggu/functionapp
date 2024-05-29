@@ -6,9 +6,6 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 
 
-	  <DockerfileRunArguments>
-		  -v "c:/host_path:/container_path"
-	  </DockerfileRunArguments>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.2.0" />
