@@ -16,17 +16,23 @@ jobs:
       with:
         username: "sguggu"
         password: “$env:DOCKER_PASSWORD”
+
+
+    - uses: azure/login@v2
+      with:
+        creds: “$env:AZURE_CREDENTIALS"
+        enable-AzPSSession: true
         
     - name: Build and push Docker image to ACR
       run: |
-        docker build . -t mycontainerregistry197.azurecr.io/django-app:latest
-        docker push mycontainerregistry197.azurecr.io/django-app:latest
+        docker build . -t mycontainerreg555.azurecr.io/counter-image:latest
+        docker push mycontainerreg555.azurecr.io/counter-image:latest
   
     - name: Deploy to ACA
       run: |
           az container create --resource-group Ymyrg \
                                 --name containerApp555 \
-                                --image mycontainerregistry197.azurecr.io/django-app:latest \
+                                --image mycontainerreg555.azurecr.io/counter-image:latest \
                                 --cpu 1 \
                                 --memory 1 \
                                 --ports 80 \
