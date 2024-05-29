@@ -9,10 +9,15 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
- 
+      
+    - name: Azure Docker Login
+      uses: azure/docker-login@v2
+      with:
+          username: "sguggu"
+          password: “$env:DOCKER_PASSWORD”
           
-    - name: Login to ACR
-    - uses: azure/docker-login@v2
+    - name: Azure Container Registry Login
+      uses: azure/container-registry-login@v1
       with:
         login-server: mycontainerregistry197.azurecr.io
         username: “$env:ACR_USERNAME"
